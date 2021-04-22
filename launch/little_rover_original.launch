@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+<arg name="model" default="$(find little_rover)/urdf/little_rover.urdf.xacro"/>
+
+<!-- Launch gazebo -->
+ <include file="$(find little_rover)/launch/gazebo.launch">
+   <arg name="model" value="$(arg model)" />
+   <arg name="gui" value="false"/>
+ </include>
+
+ <!-- Startup the controller -->
+ <rosparam file="$(find little_rover)/config/joint_states_robot.yaml" command="load"/>
+ <rosparam file="$(find little_rover)/config/diff_drive_robot.yaml" command="load"/>
+
+ <!-- Load controllers -->
+ <node name="little_rover_controller_manager" pkg="controller_manager" type="spawner" respawn="true" output="screen" args="/little_rover/joint_state_controller /little_rover/mobile_base_controller"/>
+
+<!-- convert joints states to TF transforms -->
+<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	respawn="false" output="screen">
+</node>
+
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find little_rover)/rviz/little_rover_rtabmap_ros.rviz" required="true"/>
+
+<!-- Launch the teleop node -->
+<node name="little_rover_teleop" pkg="little_rover" type="little_rover_teleop">
+	<!--<remap from="/little_rover/mobile_base_controller/cmd_vel" to="cmd_vel"/>-->
+</node>
+
+<!-- Launch the joy node -->
+<node name="joy_node" pkg="joy" type="joy_node">
+<param name="autorepeat_rate" value="1000" />
+</node>
+
+</launch>
+

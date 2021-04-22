@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+<!-- these are the arguments you can pass this launch file, for example pau    sed:=true -->
+<arg name="paused" default="false"/>
+<arg name="use_sim_time" default="true"/>
+<arg name="gui" default="true"/>
+<arg name="headless" default="false"/>
+<arg name="debug" default="false"/>
+<arg name="model" default="$(find little_rover)/urdf/little_rover.urdf.xacro"/>
+
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <arg name="world_name" value="$(find little_rover)/worlds/home.world"/>
+  <arg name="debug" value="$(arg debug)" />
+  <arg name="gui" value="$(arg gui)" />
+  <arg name="paused" value="$(arg paused)"/>
+  <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+  <arg name="headless" value="$(arg headless)"/>
+</include> 
+
+<!-- Load the URDF into the ROS Parameter Server -->
+<param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0 -unpause -urdf -model model -param robot_description"/>
+
+</launch>

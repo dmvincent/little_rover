@@ -1,0 +1,1178 @@
+<?xml version="1.0"?> 
+<!-- Revolute-Revolute Manipulator -->
+<robot name="little_rover" xmlns:xacro="http://ros.org/wiki/xacro">
+<xacro:include filename="$(find little_rover)/urdf/_d435.urdf.xacro" />
+
+  <!-- Define colors to use -->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="orange">
+    <color rgba="1.0 0.4 0.04 1.0"/>
+  </material>
+
+  <!-- Define ROS controller plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <link name="base_link"/>
+
+  <joint name="dummy_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="dummy"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <!-- Link used to define the rover body -->
+  <link name="dummy">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/baseframe.dae"/>
+        </geometry>
+        <material name="orange"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/baseframe.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.40825332"/>
+      <inertia ixx="0.00290479"  ixy="0"  ixz="0.0003146" iyy="0.00401074" iyz="0" izz="0.00690116" />
+    </inertial>
+  </link>
+  <!-- Color Properties for rover -->
+  <gazebo reference="dummy">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+
+<!-- define the castor baseplate -->
+  <joint name="castor_baseplate_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="castor_baseplate"/>
+    <origin xyz="-0.13952 0 -0.01925" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Link used to define the rover body -->
+  <link name="castor_baseplate">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/castor_baseplate.dae"/>
+        </geometry>
+        <material name="orange"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/castor_baseplate.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.23041547"/>
+      <inertia ixx="0.00006154"  ixy="0"  ixz="0" iyy="0.00010617" iyz="0" izz="0.00016438" />
+    </inertial>
+  </link>
+  <!-- Color Properties for rover -->
+  <gazebo reference="castor_baseplate">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+
+<!-- define the castor SWIVEL -->
+  <joint name="castor_swivel_joint" type="continuous">
+    <parent link="dummy"/>
+    <child link="castor_swivel"/>
+    <origin xyz=" -0.13952 0 -0.048014399" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Link used to define the castor SWIVEL -->
+  <link name="castor_swivel">
+    <visual>
+        <origin xyz="-0.02552697 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/castor_swivel.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="-0.02552697 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/castor_swivel.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+        <origin xyz="-0.02552697 0 0" rpy="0 0 0"/>
+      <mass value="0.32608979"/>
+      <inertia ixx="0.00019346"  ixy="0"  ixz="-0.00000695" iyy="0.00041506" iyz="0" izz="0.00044385" />
+    </inertial>
+  </link>
+
+<!-- define the castor WHEEL -->
+  <joint name="castor_wheel_joint" type="continuous">
+    <parent link="castor_swivel"/>
+    <child link="castor_wheel"/>
+    <origin xyz=" -0.04467807 0 -0.033561514" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Link used to define the castor WHEEL -->
+  <link name="castor_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/castor_wheel.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/castor_wheel.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.12613212"/>
+      <inertia ixx="0.00005694"  ixy="0"  ixz="0" iyy="0.00009868" iyz="0" izz="0.00005694" />
+    </inertial>
+  </link>
+
+
+<!-- define the LEFT MOTOR -->
+  <joint name="left_motor_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="left_motor"/>
+    <origin xyz=" 0.11103 0.105081768 -0.04347" rpy="0 0 3.14"/>
+  </joint>
+
+  <!-- Link used to define the castor WHEEL -->
+  <link name="left_motor">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motor.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motor.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.78356005"/>
+      <inertia ixx="0.00347687"  ixy="0"  ixz="0" iyy="0.00041889" iyz="0.0000107" izz="0.00347521" />
+    </inertial>
+  </link>
+
+<!-- define the RIGHT MOTOR -->
+  <joint name="right_motor_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="right_motor"/>
+    <origin xyz=" 0.11103 -0.105081768 -0.04347" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Link used to define the RIGHT MOTOR -->
+  <link name="right_motor">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motor.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motor.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.78356005"/>
+      <inertia ixx="0.00347687"  ixy="0"  ixz="0" iyy="0.00041889" iyz="0.0000107" izz="0.00347521" />
+    </inertial>
+  </link>
+
+<!-- define the LEFT WHEEL -->
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0.111031338 0.199701540 -0.043472939" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="99" velocity="99"/>
+  </joint>
+
+  <!-- Link used to define the LEFT WHEEL -->
+  <link name="left_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/wheels.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/wheels.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.22670304"/>
+      <inertia ixx="0.00043593"  ixy="0"  ixz="0" iyy="0.00084810" iyz="0.0000107" izz="0.00043593" />
+    </inertial>
+  </link>
+
+<!-- define the LEFT MOTOR MOUNT -->
+  <joint name="left_motor_mount_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="left_motor_mount"/>
+    <origin xyz=" 0.111031338 0.172344332 -0.025877769" rpy = "0 0 3.14"/>
+  </joint>
+
+  <!-- Link used to define the LEFT MOTOR MOUNT -->
+  <link name="left_motor_mount">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motormount.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motormount.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.04698869"/>
+      <inertia ixx="0.00002328"  ixy="0"  ixz="-0" iyy="0.00004708" iyz="0.00000376" izz="0.00002855" />
+    </inertial>
+  </link>
+
+<!-- define the RIGHT WHEEL -->
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0.111031338 -0.199701540 -0.043472939" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="99" velocity="99"/>
+  </joint>
+
+  <!-- Link used to define the RIGHT WHEEL -->
+  <link name="right_wheel">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/wheels.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/wheels.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+     <!-- <origin xyz="-0.15 0 0" rpy="0 0 0"/>-->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.22670304"/>
+      <inertia ixx="0.00043593"  ixy="0"  ixz="0" iyy="0.00084810" iyz="0.0000107" izz="0.00043593" />
+    </inertial>
+  </link>
+
+<!-- define the RIGHT MOTOR MOUNT -->
+  <joint name="right_motor_mount_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="right_motor_mount"/>
+    <origin xyz=" 0.111031338 -0.172344332 -0.025877769"/>
+  </joint>
+
+  <!-- Link used to define the RIGHT MOTOR MOUNT -->
+  <link name="right_motor_mount">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motormount.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motormount.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.04698869"/>
+      <inertia ixx="0.00002328"  ixy="0"  ixz="-0" iyy="0.00004708" iyz="0.00000376" izz="0.00002855" />
+    </inertial>
+  </link>
+
+<!-- define the USB HUB -->
+  <joint name="usb_hub_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="usb_hub"/>
+    <origin xyz=" -0.105434181 0 0.011551733"/>
+  </joint>
+
+  <!-- Link used to define the USB HUB -->
+  <link name="usb_hub">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/usb_hub.dae"/>
+        </geometry>
+        <material name="black"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/usb_hub.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01814184"/>
+      <inertia ixx="0.00001732"  ixy="0"  ixz="0" iyy="0.00000161" iyz="0" izz="0.00001863" />
+    </inertial>
+  </link>
+  <!-- Color Properties for rover -->
+  <gazebo reference="usb_hub">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- define the LIPO_BATTERY -->
+  <joint name="lipo_battery_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="lipo_battery"/>
+    <origin xyz=" -0.0568335285 0 0.01754591394"/>
+  </joint>
+
+  <!-- Link used to define the LIPO_BATTERY -->
+  <link name="lipo_battery">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/lipo_battery.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/lipo_battery.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.411547"/>
+      <inertia ixx="0.000640"  ixy="0"  ixz="0" iyy="0.000086" iyz="0" izz="0.000693" />
+    </inertial>
+  </link>
+
+<!-- define the TEGRA -->
+  <joint name="tegra_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="tegra"/>
+    <origin xyz=" 0.047725555 0 0.02601842767"/>
+  </joint>
+
+  <!-- Link used to define the TEGRA -->
+  <link name="tegra">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/tegra.dae"/>
+        </geometry>
+        <material name="black"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/usbtegra_hub.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.51699145"/>
+      <inertia ixx="0.0073190"  ixy="-0.00002872"  ixz="-0.00004840" iyy="0.00068670" iyz="0.00001379" izz="0.0013062" />
+    </inertial>
+  </link>
+  <!-- Color Properties for rover -->
+  <gazebo reference="tegra">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- define the MOUNTED PLATFORM -->
+  <joint name="mounted_platform_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="mounted_platform"/>
+    <origin xyz=" -0.072019494 0 0.049726733"/>
+  </joint>
+
+  <!-- Link used to define the MOUNTED PLATFORM -->
+  <link name="mounted_platform">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/mountedframe.dae"/>
+        </geometry>
+        <material name="orange"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/mountedframe.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00013797"/>
+      <inertia ixx="0.0014988"  ixy="0"  ixz="0" iyy="0.00005060" iyz="0" izz="0.00020016" />
+    </inertial>
+  </link>
+  <!-- Color Properties for rover -->
+  <gazebo reference="mounted_platform">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+<!-- define the LIDAR -->
+  <joint name="lidar_to_frame_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar"/>
+    <origin xyz=" -0.090928513 0 0.072214832"/>
+  </joint>
+
+  <!-- Link used to define the LIDAR -->
+  <link name="lidar">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/lidar.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/lidar.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.018999609"/>
+      <inertia ixx="0.00008853"  ixy="0"  ixz="0" iyy="0.0008853" iyz="0" izz="0.00012710" />
+    </inertial>
+  </link>
+
+  <!-- RpLidar A2 using GPU -->
+  <gazebo reference="lidar">
+    <sensor type="ray" name="head_rplidar_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>750</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.57</min_angle>
+            <max_angle>1.57</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.5</min>
+          <max>8.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_laser.so">     
+        <topicName>scan</topicName>
+        <frameName>lidar</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+<!-- define the GPS -->
+  <joint name="gps_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="gps_link"/>
+    <origin xyz=" -0.074751030 -0.06172963534 0.067406362"/>
+  </joint>
+
+  <!-- Link used to define the GPS -->
+  <link name="gps_link">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/gps.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/gps.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01698754"/>
+      <inertia ixx="0.00000106"  ixy="0"  ixz="0.00000004" iyy="0.00000131" iyz="0" izz="0.00000197" />
+    </inertial>
+  </link>
+
+<!-- define the GPS PROTOBOARD-->
+  <joint name="gps_protoboard_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="gps_protoboard"/>
+    <origin xyz=" -0.074751030 -0.06172963534 0.05866373322"/>
+  </joint>
+
+  <!-- Link used to define the GPS PROTOBOARD -->
+  <link name="gps_protoboard">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/gps_protoboard.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/gps_protoboard.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00096284"/>
+      <inertia ixx="0.00000009"  ixy="0"  ixz="0" iyy="0.00000016" iyz="0" izz="0.00000025" />
+    </inertial>
+  </link>
+
+<!-- define the IMU -->
+  <joint name="imu_to_frame_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz=" -0.034684662 0 0.036854179"/>
+  </joint>
+
+  <!-- Link used to define the IMU -->
+  <link name="imu_link">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/imu.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/imu.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00070068"/>
+      <inertia ixx="0.00000002"  ixy="0"  ixz="0" iyy="0.00000003" iyz="0" izz="0.00000004" />
+    </inertial>
+  </link>
+
+<!-- define the IMU PROTOBOARD -->
+  <joint name="imu_protoboard_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="imu_protoboard"/>
+    <origin xyz=" -0.034684662 0 0.040789733"/>
+  </joint>
+
+  <!-- Link used to define the IMU PROTOBOARD -->
+  <link name="imu_protoboard">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/imu_protoboard.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/imu_protoboard.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00046292"/>
+      <inertia ixx="0.00000002"  ixy="0"  ixz="0" iyy="0.00000003" iyz="0" izz="0.00000006" />
+    </inertial>
+  </link>
+
+<!-- define the MOTOR_DRIVER -->
+  <joint name="motor_driver_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="motor_driver"/>
+    <origin xyz=" 0.027804925 0 -0.011183322"/>
+  </joint>
+
+  <!-- Link used to define the MOTORDRIVER -->
+  <link name="motor_driver">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motor_driver.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/motor_driver.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.07299047"/>
+      <inertia ixx="0.00001789"  ixy="0.00000057"  ixz="-0.00000092" iyy="0.00000057" iyz="0.00000007" izz="0.00003962" />
+    </inertial>
+  </link>
+
+<!-- define the MOUNTED_FRAME_STANDOFF_1 -->
+  <joint name="mountedframe_standoff_1_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="mountedframe_standoff_1"/>
+    <origin xyz="-0.024198663 0.11308 0.02655173322"/>
+  </joint>
+
+  <!-- Link used to define the MOUNTED_FRAME_STANDOFF_1 -->
+  <link name="mountedframe_standoff_1">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00498831"/>
+      <inertia ixx="0.00000068"  ixy="0"  ixz="0" iyy="0.00000068" iyz="0" izz="0.00000003" />
+    </inertial>
+  </link>
+
+<!-- define the MOUNTED_FRAME_STANDOFF_2 -->
+  <joint name="mountedframe_standoff_2_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="mountedframe_standoff_2"/>
+    <origin xyz="-0.1301986625 0.06600315463 0.02655173322"/>
+  </joint>
+
+  <!-- Link used to define the MOUNTED_FRAME_STANDOFF_2 -->
+  <link name="mountedframe_standoff_2">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00498831"/>
+      <inertia ixx="0.00000068"  ixy="0"  ixz="0" iyy="0.00000068" iyz="0" izz="0.00000003" />
+    </inertial>
+  </link>
+
+<!-- define the MOUNTED_FRAME_STANDOFF_3 -->
+  <joint name="mountedframe_standoff_3_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="mountedframe_standoff_3"/>
+    <origin xyz="-0.1301986625 -0.06600315463 0.02655173322"/>
+  </joint>
+
+  <!-- Link used to define the MOUNTED_FRAME_STANDOFF_3 -->
+  <link name="mountedframe_standoff_3">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00498831"/>
+      <inertia ixx="0.00000068"  ixy="0"  ixz="0" iyy="0.00000068" iyz="0" izz="0.00000003" />
+    </inertial>
+  </link>
+
+<!-- define the MOUNTED_FRAME_STANDOFF_4 -->
+  <joint name="mountedframe_standoff_4_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="mountedframe_standoff_4"/>
+    <origin xyz="-0.024198663 -0.11308 0.02655173322"/>
+  </joint>
+
+  <!-- Link used to define the MOUNTED_FRAME_STANDOFF_4 -->
+  <link name="mountedframe_standoff_4">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/40mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00498831"/>
+      <inertia ixx="0.00000068"  ixy="0"  ixz="0" iyy="0.00000068" iyz="0" izz="0.00000003" />
+    </inertial>
+  </link>
+
+<!-- define the GPS_STANDOFF_1 -->
+  <joint name="gps_standoff_1_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="gps_standoff_1"/>
+    <origin xyz="-0.05925102998 -0.05172963534 0.05540173322"/>
+  </joint>
+
+  <!-- Link used to define the GPS_STANDOFF_1 -->
+  <link name="gps_standoff_1">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the GPS_STANDOFF_2 -->
+  <joint name="gps_standoff_2_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="gps_standoff_2"/>
+    <origin xyz="-0.09025102998 -0.05172963534 0.05540173322"/>
+  </joint>
+
+  <!-- Link used to define the GPS_STANDOFF_2 -->
+  <link name="gps_standoff_2">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the GPS_STANDOFF_3 -->
+  <joint name="gps_standoff_3_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="gps_standoff_3"/>
+    <origin xyz="-0.09025102998 -0.07172963534 0.05540173322"/>
+  </joint>
+
+  <!-- Link used to define the GPS_STANDOFF_3 -->
+  <link name="gps_standoff_3">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the GPS_STANDOFF_4 -->
+  <joint name="gps_standoff_4_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="gps_standoff_4"/>
+    <origin xyz="-0.05925102998 -0.07172963534 0.05540173322"/>
+  </joint>
+
+  <!-- Link used to define the GPS_STANDOFF_4 -->
+  <link name="gps_standoff_4">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the IMU_STANDOFF_1 -->
+  <joint name="imu_standoff_1_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="imu_standoff_1"/>
+    <origin xyz="-0.024198663 0.00757 0.04405173322"/>
+  </joint>
+
+  <!-- Link used to define the IMU_STANDOFF_1 -->
+  <link name="imu_standoff_1">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the IMU_STANDOFF_2 -->
+  <joint name="imu_standoff_2_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="imu_standoff_2"/>
+    <origin xyz="-0.0451706625 0.00757 0.04405173322"/>
+  </joint>
+
+  <!-- Link used to define the IMU_STANDOFF_2 -->
+  <link name="imu_standoff_2">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the IMU_STANDOFF_3 -->
+  <joint name="imu_standoff_3_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="imu_standoff_3"/>
+    <origin xyz="-0.0451706625 -0.00757 0.04405173322"/>
+  </joint>
+
+  <!-- Link used to define the IMU_STANDOFF_3 -->
+  <link name="imu_standoff_3">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the IMU_STANDOFF_4 -->
+  <joint name="imu_standoff_4_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="imu_standoff_4"/>
+    <origin xyz="-0.024198663 -0.00757 0.04405173322"/>
+  </joint>
+
+  <!-- Link used to define the IMU_STANDOFF_4 -->
+  <link name="imu_standoff_4">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/5mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00062354"/>
+      <inertia ixx="0"  ixy="00"  ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the TEGRA_STANDOFF_1 -->
+  <joint name="tegra_standoff_1_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="tegra_standoff_1"/>
+    <origin xyz="0.1446313375 0.04936129150 0.011551733"/>
+  </joint>
+
+  <!-- Link used to define the TEGRA_STANDOFF_1 -->
+  <link name="tegra_standoff_1">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00124708"/>
+      <inertia ixx="0.00000001"  ixy="00"  ixz="0" iyy="0.00000001" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the TEGRA_STANDOFF_2 -->
+  <joint name="tegra_standoff_2_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="tegra_standoff_2"/>
+    <origin xyz="-0.012848663 0.07219480481 0.011551733"/>
+  </joint>
+
+  <!-- Link used to define the TEGRA_STANDOFF_2 -->
+  <link name="tegra_standoff_2">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00124708"/>
+      <inertia ixx="0.00000001"  ixy="00"  ixz="0" iyy="0.00000001" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the TEGRA_STANDOFF_3 -->
+  <joint name="tegra_standoff_3_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="tegra_standoff_3"/>
+    <origin xyz="-0.012848663 -0.082728652 0.011551733"/>
+  </joint>
+
+  <!-- Link used to define the TEGRA_STANDOFF_3 -->
+  <link name="tegra_standoff_3">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00124708"/>
+      <inertia ixx="0.00000001"  ixy="00"  ixz="0" iyy="0.00000001" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<!-- define the TEGRA_STANDOFF_4 -->
+  <joint name="tegra_standoff_4_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="tegra_standoff_4"/>
+    <origin xyz="0.1446313375 -0.08272865275 0.011551733"/>
+  </joint>
+
+  <!-- Link used to define the TEGRA_STANDOFF_4 -->
+  <link name="tegra_standoff_4">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/10mm_standoff.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00124708"/>
+      <inertia ixx="0.00000001"  ixy="00"  ixz="0" iyy="0.00000001" iyz="0" izz="0" />
+    </inertial>
+  </link>
+
+<gazebo reference="imu_link">
+  <gravity>true</gravity>
+  <sensor name="imu_sensor" type="imu">
+    <always_on>true</always_on>
+    <update_rate>50</update_rate>
+    <visualize>true</visualize>
+    <topic>__default_topic__</topic>
+    <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+      <topicName>imu</topicName>
+      <bodyName>imu_link</bodyName>
+      <updateRateHZ>50.0</updateRateHZ>
+      <gaussianNoise>0.0</gaussianNoise>
+      <xyzOffset>0 0 0</xyzOffset>
+      <rpyOffset>0 0 0</rpyOffset>
+      <frameName>imu_link</frameName>
+      <initialOrientationAsReference>false</initialOrientationAsReference>
+    </plugin>
+    <pose>0 0 0 0 0 0</pose>
+  </sensor>
+</gazebo>
+
+<gazebo>
+    <plugin name="gazebo_ros_gps" filename="libhector_gazebo_ros_gps.so">
+        <updateRate>4.0</updateRate>
+        <bodyName>gps_link</bodyName>
+        <frameId>gps_link</frameId>
+        <topicName>/gps/fix</topicName>
+        <velocityTopicName>/gps/fix_velocity</velocityTopicName>
+        <referenceLatitude>-30.06022459407145675</referenceLatitude>
+        <referenceLongitude>-51.173913575780311191</referenceLongitude>
+        <referenceHeading>90</referenceHeading>
+        <referenceAltitude>10</referenceAltitude>
+        <offset>0 0 0</offset>
+        <drift>0.001 0.001 0.001</drift>
+        <gaussianNoise>0.05 0.05 0.05</gaussianNoise>
+        <velocityDrift>0.001 0.001 0.001</velocityDrift>
+        <velocityGaussianNoise>0.5 0.5 0.5</velocityGaussianNoise>
+    </plugin>
+</gazebo>
+
+<!--<link name="dummy" />-->
+<xacro:sensor_d435 name="camera" topics_ns="camera" parent="base_link" publish_pointcloud="true">
+  <origin xyz="-0.032428513 0 0.063169486" rpy="0 0 0" />
+</xacro:sensor_d435>  
+
+
+<!-- Left Wheel Transmission Element -->
+<transmission name="simple_trans_1">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="left_wheel_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="left_wheel_actuator">
+    <mechanicalReduction>1</mechanicalReduction>
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </actuator>
+</transmission>
+
+<!-- Right Wheel Transmission Element -->
+<transmission name="simple_trans_2">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="right_wheel_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="right_wheel_actuator">
+    <mechanicalReduction>1</mechanicalReduction>
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </actuator>
+</transmission>
+
+
+
+ 
+</robot>
