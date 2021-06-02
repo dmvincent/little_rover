@@ -212,7 +212,7 @@
   <joint name="left_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="left_wheel"/>
-    <origin xyz="0.111031338 0.199701540 -0.043472939" rpy="0 0 0"/>
+    <origin xyz="0.111031338 0.213989 -0.043472939" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="99" velocity="99"/>
   </joint>
@@ -271,7 +271,7 @@
   <joint name="right_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="right_wheel"/>
-    <origin xyz="0.111031338 -0.199701540 -0.043472939" rpy="0 0 0"/>
+    <origin xyz="0.111031338 -0.213989 -0.043472939" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="99" velocity="99"/>
   </joint>
@@ -330,7 +330,7 @@
   <joint name="usb_hub_to_frame_joint" type="fixed">
     <parent link="dummy"/>
     <child link="usb_hub"/>
-    <origin xyz=" -0.105434181 0 0.011551733"/>
+    <origin xyz=" -0.1551186625 0 0.011551733"/>
   </joint>
 
   <!-- Link used to define the USB HUB -->
@@ -359,11 +359,11 @@
     <material>Gazebo/Black</material>
   </gazebo>
 
-<!-- define the LIPO_BATTERY -->
+<!-- define the VENOM_LIPO_BATTERY -->
   <joint name="lipo_battery_to_frame_joint" type="fixed">
     <parent link="dummy"/>
     <child link="lipo_battery"/>
-    <origin xyz=" -0.0568335285 0 0.01754591394"/>
+    <origin xyz="-0.10202198687 0 0.01855173322"/>
   </joint>
 
   <!-- Link used to define the LIPO_BATTERY -->
@@ -371,21 +371,51 @@
     <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://little_rover/meshes/lipo_battery.dae"/>
+          <mesh filename="package://little_rover/meshes/venom.dae"/>
         </geometry>
     </visual>
     <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://little_rover/meshes/lipo_battery.dae"/>
+          <mesh filename="package://little_rover/meshes/venom.dae"/>
         </geometry>
     </collision>
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.411547"/>
+      <mass value="0.291"/>
       <inertia ixx="0.000640"  ixy="0"  ixz="0" iyy="0.000086" iyz="0" izz="0.000693" />
     </inertial>
   </link>
+
+<!-- define the FLOUREON_LIPO_BATTERY -->
+  <joint name="floureon_lipo_battery_to_frame_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="floureon_lipo_battery"/>
+    <origin xyz="-0.05202198687 0 0.01855173322"/>
+  </joint>
+
+  <!-- Link used to define the LIPO_BATTERY -->
+  <link name="floureon_lipo_battery">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/floureon_lipo.dae"/>
+        </geometry>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://little_rover/meshes/floureon_lipo.dae"/>
+        </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.248"/>
+      <inertia ixx="0.000640"  ixy="0"  ixz="0" iyy="0.000086" iyz="0" izz="0.000693" />
+    </inertial>
+  </link>
+
+
 
 <!-- define the TEGRA -->
   <joint name="tegra_to_frame_joint" type="fixed">

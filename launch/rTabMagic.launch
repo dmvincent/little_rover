@@ -30,7 +30,7 @@
 
           <param name="queue_size" type="int" value="50"/>
           <param name="approx_sync"       value="true"/> 
-
+	  <param name="tf_delay" type="double" value="0.02"/>
           <!-- RTAB-Map's parameters -->
           <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
           <param name="RGBD/ProximityBySpace"     type="string" value="true"/>

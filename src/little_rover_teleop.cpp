@@ -24,8 +24,8 @@ private:
 LittleRoverTeleop::LittleRoverTeleop():
   linear_(1),
   angular_(2),
-  l_scale_(15),
-  a_scale_(15)
+  l_scale_(5),
+  a_scale_(5)
 {
 
   nh_.param("axis_linear", linear_, linear_);
