@@ -7,11 +7,30 @@ project(little_rover)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+#find_package(catkin REQUIRED COMPONENTS
+#  roscpp
+#  rospy
+#  std_msgs
+#)
+
 find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  cmake_modules
+  control_msgs
+  control_toolbox
+  controller_manager
+  hardware_interface
+  joint_limits_interface
   roscpp
-  rospy
+  rosparam_shortcuts
+  sensor_msgs
   std_msgs
+  trajectory_msgs
+  transmission_interface
+  urdf
 )
+
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -102,11 +121,37 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
+
+#catkin_package(
+##  INCLUDE_DIRS include
+#  LIBRARIES #little_rover
+#	generic_hw_interface
+#	generic_hw_control_loop
+##  CATKIN_DEPENDS roscpp rospy std_msgs
+##  DEPENDS system_lib
+#)
+
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES little_rover
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
+  INCLUDE_DIRS
+    include
+  CATKIN_DEPENDS
+    actionlib
+    control_msgs
+    control_toolbox
+    controller_manager
+    hardware_interface
+    joint_limits_interface
+    roscpp
+    rosparam_shortcuts
+    sensor_msgs
+    std_msgs
+    trajectory_msgs
+    transmission_interface
+    urdf
+  LIBRARIES
+    generic_hw_control_loop
+    generic_hw_interface
+    sim_hw_interface
 )
 
 ###########
@@ -116,8 +161,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
+ include/
+ ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -132,6 +177,7 @@ include_directories(
 
  add_executable(little_rover_teleop src/little_rover_teleop.cpp)
  add_dependencies(little_rover_teleop ${little_rover_teleop_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -187,11 +233,11 @@ target_link_libraries(little_rover_teleop
 # )
 
 ## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+ install(DIRECTORY include/${PROJECT_NAME}/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 #   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
-# )
+ )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
@@ -212,3 +258,116 @@ target_link_libraries(little_rover_teleop
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+##########################
+## Hardware Interfacing ##
+##########################
+#add_library(generic_hw_control_loop
+#  src/generic_hw_control_loop.cpp
+#)
+#target_link_libraries(generic_hw_control_loop
+#  ${catkin_LIBRARIES}
+#)
+#
+#
+#add_library(generic_hw_interface
+#	src/generic_hw_interface.cpp
+#)
+#target_link_libraries(generic_hw_interface
+#	${catkin_LIBRARIES}
+#)
+#
+#
+#add_library(little_rover_hw_interface
+#	src/little_rover_hw_interface.cpp
+#)
+#target_link_libraries(little_rover_hw_interface
+#	generic_hw_interface
+#	${catkn_LIBRARIES}
+#)
+#
+## Main Control Executable
+#add_executable(little_rover_hw_main src/little_rover_hw_main.cpp)
+#target_link_libraries(little_rover_hw_main
+#	little_rover_hw_interface
+#	generic_hw_control_loop
+#	${catkin_LIBRARIES}
+#)
+
+## Install ---------------------------------
+
+## Install Libraries
+#install(TARGETS
+#	little_rover_hw_interface
+#	generic_hw_interface
+#	generic_hw_control_loop
+#	LIBRARY DESTINATION
+#	${CATKIN_PACKAGE_LIB_DESTINATION}
+#)
+#
+#install(TARGETS
+#	little_rover_hw_main
+#	LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} 
+#	RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
+
+# Control loop
+add_library(generic_hw_control_loop
+  src/generic_hw_control_loop.cpp
+)
+target_link_libraries(generic_hw_control_loop
+  ${catkin_LIBRARIES}
+)
+
+
+# Generic Hardware Interface
+add_library(generic_hw_interface
+  src/generic_hw_interface.cpp
+)
+target_link_libraries(generic_hw_interface
+  ${catkin_LIBRARIES}
+)
+
+
+# Install libraries
+install(TARGETS
+    generic_hw_control_loop
+    generic_hw_interface
+  LIBRARY DESTINATION
+    ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+# RRBot Hardware Interface
+add_library(little_rover_hw_interface
+  src/little_rover_hw_interface.cpp
+)
+target_link_libraries(little_rover_hw_interface
+  generic_hw_interface
+  ${catkin_LIBRARIES}
+)
+
+# Main control executable
+add_executable(little_rover_hw_main src/little_rover_hw_main.cpp)
+target_link_libraries(little_rover_hw_main
+  little_rover_hw_interface
+  generic_hw_control_loop
+  ${catkin_LIBRARIES}
+)
+
+# Install libraries
+install(TARGETS
+    little_rover_hw_interface
+  LIBRARY DESTINATION
+    ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+# Install executables
+install(TARGETS
+    little_rover_hw_main
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+
+# Install Header files
+#install(DIRECTORY include/${PROJECT_NAME}/  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

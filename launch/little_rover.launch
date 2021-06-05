@@ -40,7 +40,7 @@
 <param name="autorepeat_rate" value="10" />
 </node>
 
-<include file="$(find roboclaw_node)/launch/roboclaw.launch"/>
+<!--<include file="$(find roboclaw_node)/launch/roboclaw.launch"/>-->
 
 </launch>
 
