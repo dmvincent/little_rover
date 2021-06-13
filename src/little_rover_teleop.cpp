@@ -33,10 +33,10 @@ LittleRoverTeleop::LittleRoverTeleop():
   nh_.param("scale_angular", a_scale_, a_scale_);
   nh_.param("scale_linear", l_scale_, l_scale_);
 
-  vel_pub_ = nh_.advertise<geometry_msgs::Twist>("little_rover/mobile_base_controller/cmd_vel", 10);
+  vel_pub_ = nh_.advertise<geometry_msgs::Twist>("little_rover/mobile_base_controller/cmd_vel", 50);
 
 
-  joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &LittleRoverTeleop::joyCallback, this);
+  joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 50, &LittleRoverTeleop::joyCallback, this);
 
 }
 
