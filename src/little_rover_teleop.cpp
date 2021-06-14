@@ -22,7 +22,7 @@ private:
 
 
 LittleRoverTeleop::LittleRoverTeleop():
-  linear_(1),
+  linear_(5),
   angular_(2),
   l_scale_(5),
   a_scale_(5)

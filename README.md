@@ -1,13 +1,12 @@
 # little_rover
 
-little_rover is a SLAM enabled differential
-drive robot using ROS running on an embedded
-Linux OS. 
+little_rover is a SLAM enabled, ROS based differential
+drive robot running embedded Linux on-board a Jetson TX2 carrier board.
 
 
 ### Launch File Previews
 ##### little_rover.launch
-
+![Imgure Image](https://imgur.com/IpC4S8D.gif)
 ##### little_rover_roboclaw.launch
 
 ##### little_rover_robot.launch
