@@ -6,7 +6,7 @@ drive robot running embedded Linux on-board a Jetson TX2 carrier board.
 
 ### Launch File Previews
 ##### little_rover.launch
-![Imgur Image](https://i.imgur.com/a/StFPYRw)
+![Imgur Image](https://i.imgur.com/a/StFPYRw.gif)
 
 ##### little_rover_roboclaw.launch
 
