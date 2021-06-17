@@ -2,52 +2,41 @@
 <!-- little_rover_hw.launch-->
 
 <launch>
-
- <arg name="model" default="$(find little_rover)/urdf/little_rover.urdf.xacro"/>
-
- <!-- Load example URDF -->
- <!--<param name="robot_description" command="$(find xacro)/xacro '$(find little_rover)/urdf/little_rover.urdf.xacro'" />-->
- <!--<rosparam param="/hardware_interface/joints">['left_wheel_joint', 'right_wheel_joint']</rosparam>-->
-
-
- 	<param name="robot_description" command="xacro --inorder '$(find little_rover)/urdf/little_rover.urdf.xacro'"/>
-	 <!-- Startup the controller -->
-	 <rosparam file="$(find little_rover)/config/joint_states_robot.yaml" command="load"/>
-	 <rosparam file="$(find little_rover)/config/diff_drive_robot.yaml" command="load"/>
+	<arg name="model" default="$(find little_rover)/urdf/little_rover.urdf.xacro"/>
 	
+	<param name="robot_description" command="xacro --inorder '$(find little_rover)/urdf/little_rover.urdf.xacro'"/>
+	<!-- Startup the controller -->
+	<rosparam file="$(find little_rover)/config/joint_states_robot.yaml" command="load"/>
+	<rosparam file="$(find little_rover)/config/diff_drive_robot.yaml" command="load"/>
 	
-	 <!-- Load hardware interface -->
-	 <node name="little_rover_hardware_interface" pkg="little_rover" type="little_rover_hw_main"
-	       output="screen"/>
+	<!-- Load hardware interface -->
+	<node name="little_rover_hardware_interface" pkg="little_rover" type="little_rover_hw_main" output="screen"/>
 	
-<rosparam file="$(find little_rover)/config/little_rover_controllers.yaml" command="load"/>
-	 <!-- Load controllers -->
-	 <node name="little_rover_controller_manager" pkg="controller_manager" type="spawner" respawn="true" output="screen" args="/little_rover/joint_state_controller /little_rover/mobile_base_controller">
-	 </node>
-	
-	 <!-- convert joints states to TF transforms -->
-	 <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-	<param name="rate" value="5"/>
+	<rosparam file="$(find little_rover)/config/little_rover_controllers.yaml" command="load"/>
+	<!-- Load controllers -->
+	<node name="little_rover_controller_manager" pkg="controller_manager" type="spawner" respawn="true" output="screen" args="/little_rover/joint_state_controller /little_rover/mobile_base_controller">
 	</node>
-	 
-	 <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-	 	respawn="false" output="screen">
-	 <param name="publish_frequency" value="5"/>
-	 </node>
-
-<!-- Launch the teleop node -->
-<node name="little_rover_teleop" pkg="little_rover" type="little_rover_teleop">
-        <!--<remap from="/little_rover/mobile_base_controller/cmd_vel" to="cmd_vel"/>-->
-</node>
-
-
-<!-- Launch the joy node -->
-<node name="joy_node" pkg="joy" type="joy_node">
-<param name="autorepeat_rate" value="2" />
-</node>
-
-<include file="$(find roboclaw_node)/launch/roboclaw.launch"/>
-
-
+	
+	<!-- convert joints states to TF transforms -->
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<param name="rate" value="5"/>
+	</node>
+	
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+		<param name="publish_frequency" value="5"/>
+	</node>
+	
+	<!-- Launch the teleop node -->
+	<node name="little_rover_teleop" pkg="little_rover" type="little_rover_teleop">
+		<!--<remap from="/little_rover/mobile_base_controller/cmd_vel" to="cmd_vel"/>-->
+	</node>
+	
+	
+	<!-- Launch the joy node -->
+	<node name="joy_node" pkg="joy" type="joy_node">
+		<param name="autorepeat_rate" value="10" />
+	</node>
+	
+	<include file="$(find roboclaw_node)/launch/roboclaw.launch"/>
 </launch>
 

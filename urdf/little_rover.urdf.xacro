@@ -516,14 +516,14 @@
     <sensor type="ray" name="head_rplidar_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>false</visualize>
-      <update_rate>10</update_rate>
+      <update_rate>30</update_rate>
       <ray>
         <scan>
           <horizontal>
             <samples>750</samples>
             <resolution>1</resolution>
-            <min_angle>-1.57</min_angle>
-            <max_angle>1.57</max_angle>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
           </horizontal>
         </scan>
         <range>
@@ -1172,9 +1172,28 @@
     </plugin>
 </gazebo>
 
+<!-- define the camera parent link 
+  <joint name="realsense_cam_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="realsense_cam"/>
+    <origin xyz="-0.032428513 0 0.063169486" rpy="0 0 0"/>
+  </joint>
+
+<link name="realsense_cam">
+    <visual>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+  </link>-->
+
+
+
 <!--<link name="dummy" />-->
 <xacro:sensor_d435 name="camera" topics_ns="camera" parent="base_link" publish_pointcloud="true">
-  <origin xyz="-0.032428513 0 0.063169486" rpy="0 0 0" />
+  <!--<origin xyz="-0.032428513 0 0.063169486" rpy="0 0 0" />-->
+  <origin xyz="-0.032428513 0 0.05246948" rpy="0 0 0" />
 </xacro:sensor_d435>  
 
 

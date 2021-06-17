@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+  <group ns="camera/color">
+        <node type="image_proc" name="image_proc" pkg="image_proc"/>
+  </group>
+
+</launch>
+
