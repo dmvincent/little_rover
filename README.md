@@ -11,7 +11,11 @@ drive robot running embedded Linux on-board a Jetson TX2 carrier board.
 ##### little_rover_teleop_motors_HWIL.launch
 ![GIPHY Image](https://media.giphy.com/media/Z3HhU2yXpo7Hmsh2Va/giphy.gif)
 
-##### little_rover_robot.launch
+##### rtabmap_mapping_sim.launch
+![GIPHY Image](https://media.giphy.com/media/JPTWHpEAxFiVhatUot/giphy.gif)
+
+##### little_rover_hw.launch
+![GIPHY Image](https://media.giphy.com/media/0qBzzMY8r7dW2Fz621/giphy.gif)
 
 
 ### Sensors:
